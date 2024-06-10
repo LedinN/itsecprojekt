@@ -18,9 +18,6 @@ public class MyUser implements Serializable {
     @Column (nullable = false)
     private String password;
 
-    @Column (nullable = false)
-    private String secret;
-
     private String role;
 
     public MyUser() {}
@@ -28,7 +25,6 @@ public class MyUser implements Serializable {
         public MyUser(String email, String password, String secret) {
             this.email = email;
             this.password = password;
-            this.secret = secret;
         }
 
     public Long getId() {
@@ -53,14 +49,6 @@ public class MyUser implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getSecret() {
-        return secret;
-    }
-
-    public void setSecret(String secret) {
-        this.secret = secret;
     }
 
     public String getRole() {

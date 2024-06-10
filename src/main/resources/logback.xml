@@ -1,0 +1,37 @@
+<configuration>
+    <!-- Appender för loggning till konsolen -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Appender för loggning till fil -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>app.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root-här loggas allt som inte är specifika loggers (nedan) fångar -->
+    <root level="info">
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <!-- Specifik logger-konfiguration för er webbapplikationsklasser -->
+    <!-- Ersätt värdet för name med ert grund-Java-paket -->
+    <!-- Log-level är satt till INFO -->
+    <logger name="dev.nick.itsecprojekt" level="INFO" additivity="false">
+        <!-- logga till fil (se appendern ovan) -->
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <!-- Specifik logger-konfiguration för Springklasser -->
+    <!-- Log-level är satt till INFO -->
+    <logger name="org.springframework" level="INFO">
+        <!-- logga till konsolen -->
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+</configuration>

@@ -25,7 +25,7 @@ public class MyUserDetailsService implements UserDetailsService {
         return Collections.singletonList(new SimpleGrantedAuthority(role));
     }
 
-    //Springs sätt att hämta användardata och konvertera
+    //Springs sätt att hämta användardata och konvertera till Springs User objekt
     @Override
     public User loadUserByUsername(final String username) throws UsernameNotFoundException {
 

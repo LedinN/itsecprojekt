@@ -31,7 +31,6 @@ public class MyController {
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("user", new DTOUser());
-
         return "register";
     }
 
@@ -49,7 +48,7 @@ public class MyController {
 
         model.addAttribute("successMessage", user.getEmail()+" registered successfully");
 
-        return "register";
+        return "register_success";
     }
 
 }

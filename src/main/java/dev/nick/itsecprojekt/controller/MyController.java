@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.HtmlUtils;
 
 
 @Controller
@@ -43,8 +44,11 @@ public class MyController {
            logger.error("Error while creating new user");
             return "register";
         }
+
+        String sanitizedEmail = HtmlUtils.htmlEscape(DTOuser.getEmail());
+
         MyUser user = new MyUser();
-        user.setEmail(DTOuser.getEmail());
+        user.setEmail(sanitizedEmail);
         user.setPassword(passwordEncoder.encode(DTOuser.getPassword()));
         user.setRole(DTOuser.getRole());
         userRepository.save(user);
@@ -70,14 +74,15 @@ public class MyController {
 
     @PostMapping("/delete_user")
     public String delete_user(@RequestParam("email") String email, Model model) {
-        MyUser user = userRepository.findByEmail(email);
+        String escapedEmail = HtmlUtils.htmlEscape(email);
+        MyUser user = userRepository.findByEmail(escapedEmail);
         if (user != null) {
             userRepository.delete(user);
             model.addAttribute("deletedUserEmail", user.getEmail());
             logger.info("User deleted successfully", user.getEmail());
             return "delete_success";
         } else {
-            model.addAttribute("errorMessage", email+" not found");
+            model.addAttribute("errorMessage", escapedEmail+" not found");
             logger.info("User Not Found");
             return "delete_user";
         }

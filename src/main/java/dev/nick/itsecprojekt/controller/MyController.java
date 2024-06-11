@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MyController {
@@ -25,12 +26,6 @@ public class MyController {
     public MyController(PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-
-    }
-
-    @GetMapping("/")
-    public String startpage(){
-        return "startpage";
     }
 
     @GetMapping("/register")
@@ -40,7 +35,7 @@ public class MyController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
+    public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model ) {
         if (bindingResult.hasErrors()) {
 
            logger.error("Error while creating new user");
@@ -49,14 +44,38 @@ public class MyController {
         MyUser user = new MyUser();
         user.setEmail(DTOuser.getEmail());
         user.setPassword(passwordEncoder.encode(DTOuser.getPassword()));
-        user.setRole("USER");
+        user.setRole(DTOuser.getRole());
         userRepository.save(user);
 
         model.addAttribute("successMessage", user.getEmail()+" registered successfully");
 
         logger.info("User registered successfully", user.getEmail());
 
+
         return "register_success";
+    }
+
+    @GetMapping("/")
+    public String startpage() {
+        return "startpage";
+    }
+
+    @GetMapping("/delete_user")
+    public String remove_user() {
+        return "delete_user";
+    }
+
+    @PostMapping("/delete_user")
+    public String delete_user(@RequestParam("email") String email, Model model) {
+        MyUser user = userRepository.findByEmail(email);
+        if (user != null) {
+            userRepository.delete(user);
+            model.addAttribute("deletedUserEmail", user.getEmail());
+            return "delete_success";
+        } else {
+            model.addAttribute("errorMessage", email+" not found");
+            return "delete_user";
+        }
     }
 
 }

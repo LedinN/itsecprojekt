@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MyController {
@@ -50,5 +51,25 @@ public class MyController {
 
         return "register_success";
     }
+
+    @GetMapping("/delete_user")
+    public String remove_user(Model model) {
+        model.addAttribute("user", new DTOUser());
+        return "delete_user";
+    }
+
+    @PostMapping("/delete_user")
+    public String remove_user(@RequestParam("email") String email, Model model) {
+        MyUser user = userRepository.findByEmail(email);
+        if (user != null) {
+            userRepository.delete(user);
+            model.addAttribute("successMessage", user.getEmail()+" deleted successfully");
+            return "delete_success";
+        } else {
+            model.addAttribute("errorMessage", email+" not found");
+            return "delete_user";
+        }
+    }
+
 
 }

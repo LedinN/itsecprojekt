@@ -36,7 +36,7 @@ public class MyController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
+    public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             System.out.println("ERRORS"); // REPLACE WITH LOGGER
             return "register";
@@ -47,23 +47,20 @@ public class MyController {
         user.setRole("USER");
         userRepository.save(user);
 
-        model.addAttribute("successMessage", user.getEmail()+" registered successfully");
-
         return "register_success";
     }
 
     @GetMapping("/delete_user")
-    public String remove_user(Model model) {
-        model.addAttribute("user", new DTOUser());
+    public String remove_user() {
         return "delete_user";
     }
 
     @PostMapping("/delete_user")
-    public String remove_user(@RequestParam("email") String email, Model model) {
+    public String delete_user(@RequestParam("email") String email, Model model) {
         MyUser user = userRepository.findByEmail(email);
         if (user != null) {
             userRepository.delete(user);
-            model.addAttribute("successMessage", user.getEmail()+" deleted successfully");
+            model.addAttribute("deletedUserEmail", user.getEmail());
             return "delete_success";
         } else {
             model.addAttribute("errorMessage", email+" not found");

@@ -13,6 +13,9 @@
         <br/>
         <button type="submit">Delete user</button>
     </form>
+    <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}" style="color:red;"></p>
+    </div>
 </div>
 </body>
 </html>

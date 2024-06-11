@@ -20,12 +20,6 @@ public class MyController {
     public MyController(PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-
-    }
-
-    @GetMapping("/")
-    public String startpage(){
-        return "startpage";
     }
 
     @GetMapping("/register")
@@ -43,12 +37,17 @@ public class MyController {
         MyUser user = new MyUser();
         user.setEmail(DTOuser.getEmail());
         user.setPassword(passwordEncoder.encode(DTOuser.getPassword()));
-        user.setRole("USER");
+        user.setRole(DTOuser.getRole());
         userRepository.save(user);
 
-        model.addAttribute("successMessage", user.getEmail()+" registered successfully");
+        model.addAttribute("successMessage", user.getEmail() + " registered successfully");
 
         return "register_success";
+    }
+
+    @GetMapping("/")
+    public String startpage() {
+        return "startpage";
     }
 
 }

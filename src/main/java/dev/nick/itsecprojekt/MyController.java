@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 @Controller
 public class MyController {
 
@@ -30,7 +31,7 @@ public class MyController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult) {
+    public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             System.out.println("ERRORS"); // REPLACE WITH LOGGER
             return "register";
@@ -44,6 +45,7 @@ public class MyController {
         model.addAttribute("successMessage", user.getEmail() + " registered successfully");
         return "register_success";
     }
+
 
     @GetMapping("/")
     public String startpage() {

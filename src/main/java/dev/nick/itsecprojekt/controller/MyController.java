@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 @Controller
 public class MyController {
 
@@ -35,7 +36,8 @@ public class MyController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model ) {
+
+    public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
 
            logger.error("Error while creating new user");
@@ -54,6 +56,7 @@ public class MyController {
 
         return "register_success";
     }
+
 
     @GetMapping("/")
     public String startpage() {

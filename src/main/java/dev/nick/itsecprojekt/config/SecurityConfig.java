@@ -1,6 +1,7 @@
 package dev.nick.itsecprojekt.config;
 
 import dev.nick.itsecprojekt.persistence.UserRepository;
+import dev.nick.itsecprojekt.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +28,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
-                                .requestMatchers("/", "remove_user", "update_user","/register").hasRole("ADMIN")
-                                .requestMatchers("/startpage").hasAnyRole("USER","ADMIN")
+                                .requestMatchers("remove_user", "update_user","/register").hasRole("ADMIN")
+                                .requestMatchers("/").hasAnyRole("USER","ADMIN")
                                 .requestMatchers("/login", "logout").permitAll()
                                 .anyRequest().authenticated()
                 )

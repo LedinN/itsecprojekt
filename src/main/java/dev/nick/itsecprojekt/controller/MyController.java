@@ -71,9 +71,11 @@ public class MyController {
         if (user != null) {
             userRepository.delete(user);
             model.addAttribute("deletedUserEmail", user.getEmail());
+            logger.info("User deleted successfully", user.getEmail());
             return "delete_success";
         } else {
             model.addAttribute("errorMessage", email+" not found");
+            logger.info("User Not Found");
             return "delete_user";
         }
     }

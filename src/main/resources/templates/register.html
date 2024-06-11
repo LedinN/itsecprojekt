@@ -19,6 +19,14 @@
         <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</span>
         <br/>
 
+        <label>Role:</label>
+        <select th:field="*{role}">
+            <option value="USER">User</option>
+            <option value="ADMIN">Admin</option>
+        </select>
+        <span th:if="${#fields.hasErrors('role')}" th:errors="*{role}">Role error</span>
+        <br/>
+
         <button type="submit">Register</button>
 
     </form>

@@ -1,4 +1,4 @@
-package dev.nick.itsecprojekt;
+package dev.nick.itsecprojekt.config;
 
 
 import org.springframework.context.annotation.Bean;

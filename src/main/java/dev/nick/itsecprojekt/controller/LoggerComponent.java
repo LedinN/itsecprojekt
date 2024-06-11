@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class LoggController {
+public class LoggerComponent {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoggController.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoggerComponent.class);
 
 
 }

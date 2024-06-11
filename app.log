@@ -144,7 +144,7 @@ insert into my_user (email,password,role,id) values (?,?,?,default) [23505-224]
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
 	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:223)
 	at jdk.proxy2/jdk.proxy2.$Proxy119.save(Unknown Source)
-	at dev.nick.itsecprojekt.MyController.register(MyController.java:48)
+	at dev.nick.itsecprojekt.controller.MyController.register(MyController.java:48)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255)

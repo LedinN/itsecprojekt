@@ -1,8 +1,11 @@
-package dev.nick.itsecprojekt;
+package dev.nick.itsecprojekt.controller;
 
+import dev.nick.itsecprojekt.DTOUser;
 import dev.nick.itsecprojekt.persistence.MyUser;
 import dev.nick.itsecprojekt.persistence.UserRepository;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class MyController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MyController.class);
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -37,7 +42,8 @@ public class MyController {
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            System.out.println("ERRORS"); // REPLACE WITH LOGGER
+
+           logger.error("Error while creating new user");
             return "register";
         }
         MyUser user = new MyUser();
@@ -47,6 +53,8 @@ public class MyController {
         userRepository.save(user);
 
         model.addAttribute("successMessage", user.getEmail()+" registered successfully");
+
+        logger.info("User registered successfully", user.getEmail());
 
         return "register_success";
     }

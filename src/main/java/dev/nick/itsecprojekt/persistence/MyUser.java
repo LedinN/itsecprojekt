@@ -12,20 +12,35 @@ public class MyUser implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String firstname;
+
+    @Column(nullable = false)
+    private String lastname;
+
+    @Column(nullable = false)
+    private int age;
+
+    @Column(nullable = false)
     private String role;
 
-    public MyUser() {}
+    public MyUser() {
+    }
 
-        public MyUser(String email, String password, String secret) {
-            this.email = email;
-            this.password = password;
-        }
+    public MyUser(String email, String password, String firstname, String lastname, int age, String role) {
+        this.email = email;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.age = age;
+        this.role = role;
+    }
 
     public Long getId() {
         return id;
@@ -51,6 +66,30 @@ public class MyUser implements Serializable {
         this.password = password;
     }
 
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     public String getRole() {
         return role;
     }
@@ -59,6 +98,3 @@ public class MyUser implements Serializable {
         this.role = role;
     }
 }
-
-
-

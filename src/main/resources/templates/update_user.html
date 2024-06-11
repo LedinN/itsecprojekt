@@ -1,10 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Update User</title>
 </head>
 <body>
+<div>
+    <h1>Update User</h1>
+    <form action="#" th:action="@{/update_user}" method="post" th:object="${user}">
 
+        <label>E-mail:</label>
+        <input type="text" th:field="*{email}" />
+        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">E-mail error</span>
+        <br/>
+
+        <label>Password:</label>
+        <input type="password" th:field="*{password}" />
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</span>
+        <br/>
+
+        <label>First Name:</label>
+        <input type="text" th:field="*{firstname}" />
+        <span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">First Name error</span>
+        <br/>
+
+        <label>Last Name:</label>
+        <input type="text" th:field="*{lastname}" />
+        <span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Last Name error</span>
+        <br/>
+
+        <label>Age:</label>
+        <input type="number" th:field="*{age}" />
+        <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</span>
+        <br/>
+
+        <label>Role:</label>
+        <select th:field="*{role}">
+            <option value="USER">User</option>
+            <option value="ADMIN">Admin</option>
+        </select>
+        <span th:if="${#fields.hasErrors('role')}" th:errors="*{role}">Role error</span>
+        <br/>
+
+        <button type="submit">Update</button>
+
+    </form>
+</div>
 </body>
 </html>

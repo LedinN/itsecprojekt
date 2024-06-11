@@ -1,6 +1,7 @@
 package dev.nick.itsecprojekt.controller;
 
 import dev.nick.itsecprojekt.DTOUser;
+import dev.nick.itsecprojekt.PasswordUpdateDTO;
 import dev.nick.itsecprojekt.persistence.MyUser;
 import dev.nick.itsecprojekt.persistence.UserRepository;
 import jakarta.validation.Valid;
@@ -46,11 +47,13 @@ public class MyController {
         }
 
         String sanitizedEmail = HtmlUtils.htmlEscape(DTOuser.getEmail());
-
         MyUser user = new MyUser();
         user.setEmail(sanitizedEmail);
         user.setPassword(passwordEncoder.encode(DTOuser.getPassword()));
         user.setRole(DTOuser.getRole());
+        user.setFirstname(DTOuser.getFirstname());
+        user.setLastname(DTOuser.getLastname());
+        user.setAge(DTOuser.getAge());
         userRepository.save(user);
 
         model.addAttribute("successMessage", user.getEmail()+" registered successfully");
@@ -114,4 +117,28 @@ public class MyController {
             return "update_user";
         }
     }
+
+    @GetMapping("/update_password")
+    public String updatePasswordForm(Model model) {
+        model.addAttribute("passwordUpdateDTO", new PasswordUpdateDTO());
+        return "update_password";
+    }
+
+    @PostMapping("/update_password")
+    public String updatePassword(@Valid @ModelAttribute("passwordUpdateDTO") PasswordUpdateDTO passwordUpdateDTO, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "update_password";
+        }
+        MyUser user = userRepository.findByEmail(passwordUpdateDTO.getEmail());
+        if (user != null) {
+            user.setPassword(passwordEncoder.encode(passwordUpdateDTO.getNewPassword()));
+            userRepository.save(user);
+            model.addAttribute("successMessage", "Password updated successfully");
+            return "update_password_success";
+        } else {
+            model.addAttribute("errorMessage", "User not found");
+            return "update_password";
+        }
+    }
+
 }

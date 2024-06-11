@@ -21,8 +21,6 @@ public class SecurityConfig {
     @Autowired
     private UserRepository userRepository;
 
-
-
     @Bean
     public SecurityFilterChain securityChain(HttpSecurity http) throws Exception {
         http

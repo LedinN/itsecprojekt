@@ -88,4 +88,30 @@ public class MyController {
         }
     }
 
+    @GetMapping("/update_user")
+    public String updateUserForm(Model model) {
+        model.addAttribute("user", new DTOUser());
+        return "update_user";
+    }
+
+    @PostMapping("/update_user")
+    public String updateUser(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "update_user";
+        }
+        MyUser user = userRepository.findByEmail(DTOuser.getEmail());
+        if (user != null) {
+            user.setPassword(passwordEncoder.encode(DTOuser.getPassword()));
+            user.setRole(DTOuser.getRole());
+            user.setFirstname(DTOuser.getFirstname());
+            user.setLastname(DTOuser.getLastname());
+            user.setAge(DTOuser.getAge());
+            userRepository.save(user);
+            model.addAttribute("successMessage", "User updated successfully");
+            return "update_success";
+        } else {
+            model.addAttribute("errorMessage", "User not found");
+            return "update_user";
+        }
+    }
 }

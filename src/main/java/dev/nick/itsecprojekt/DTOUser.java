@@ -3,9 +3,10 @@ package dev.nick.itsecprojekt;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 
 public class DTOUser {
-
 
     @NotBlank
     @Email(message = "Please enter a valid e-mail address")
@@ -18,9 +19,19 @@ public class DTOUser {
     @NotBlank
     private String role;
 
-    @Size( min = 2, max = 50)
-    private String name;
+    @NotBlank
+    @Size(min = 2, max = 50)
+    private String firstname;
 
+    @NotBlank
+    @Size(min = 2, max = 50)
+    private String lastname;
+
+    @Min(0)
+    @Max(120)
+    private int age;
+
+    // Getters and Setters
     public String getEmail() {
         return email;
     }
@@ -37,15 +48,35 @@ public class DTOUser {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getRole() {
+        return role;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public String getRole() { return role; }
+    public String getFirstname() {
+        return firstname;
+    }
 
-    public void setRole(String role) { this.role = role; }
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 }

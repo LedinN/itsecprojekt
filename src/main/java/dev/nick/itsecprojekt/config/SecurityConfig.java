@@ -1,6 +1,7 @@
-package dev.nick.itsecprojekt;
+package dev.nick.itsecprojekt.config;
 
 import dev.nick.itsecprojekt.persistence.UserRepository;
+import dev.nick.itsecprojekt.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

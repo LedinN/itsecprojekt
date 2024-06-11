@@ -1,4 +1,4 @@
-package dev.nick.itsecprojekt;
+package dev.nick.itsecprojekt.service;
 
 import dev.nick.itsecprojekt.persistence.MyUser;
 import dev.nick.itsecprojekt.persistence.UserRepository;

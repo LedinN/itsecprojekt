@@ -15,6 +15,9 @@ public class DTOUser {
     @Size(min = 8, max = 20)
     private String password;
 
+    @NotBlank
+    private String role;
+
     @Size( min = 2, max = 50)
     private String name;
 
@@ -41,4 +44,8 @@ public class DTOUser {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getRole() { return role; }
+
+    public void setRole(String role) { this.role = role; }
 }

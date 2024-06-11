@@ -2607,3 +2607,36 @@ Caused by: java.lang.NullPointerException: Cannot invoke "dev.nick.itsecprojekt.
 2024-06-11 11:36:34 [http-nio-8080-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 2024-06-11 11:36:34 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 2024-06-11 11:36:34 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2024-06-11 13:34:46 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-06-11 13:34:46 [main] INFO  dev.nick.itsecprojekt.ItsecprojektApplication - Starting ItsecprojektApplication using Java 22.0.1 with PID 44308 (G:\Code\itsecprojekt\target\classes started by Mr Maquina in G:\Code\itsecprojekt)
+2024-06-11 13:34:46 [main] INFO  dev.nick.itsecprojekt.ItsecprojektApplication - No active profile set, falling back to 1 default profile: "default"
+2024-06-11 13:34:47 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-11 13:34:47 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 1 JPA repository interface.
+2024-06-11 13:34:47 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-06-11 13:34:47 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-06-11 13:34:47 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2024-06-11 13:34:47 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.24]
+2024-06-11 13:34:47 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-06-11 13:34:47 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 871 ms
+2024-06-11 13:34:47 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-06-11 13:34:47 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:3788c7aa-ff48-418b-a6db-8075dc929156 user=SA
+2024-06-11 13:34:47 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-06-11 13:34:47 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-11 13:34:47 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-06-11 13:34:47 [main] INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-06-11 13:34:48 [main] INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-11 13:34:48 [main] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-11 13:34:48 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-11 13:34:49 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-11 13:34:49 [main] INFO  org.springframework.security.config.annotation.authentication.configuration.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2024-06-11 13:34:49 [main] WARN  org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2024-06-11 13:34:49 [main] INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@672549f3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4791d904, org.springframework.security.web.context.SecurityContextHolderFilter@1722ede1, org.springframework.security.web.header.HeaderWriterFilter@5d3f583d, org.springframework.web.filter.CorsFilter@6ba516ff, org.springframework.security.web.csrf.CsrfFilter@4cf46574, org.springframework.security.web.authentication.logout.LogoutFilter@e1d2781, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@3be2ef56, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@7bc239db, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@3bbb3c84, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@34f3c920, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@73bd146c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@769c80d1, org.springframework.security.web.access.ExceptionTranslationFilter@adbc3bc, org.springframework.security.web.access.intercept.AuthorizationFilter@614d01b]
+2024-06-11 13:34:49 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-06-11 13:34:49 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-06-11 13:34:49 [main] INFO  dev.nick.itsecprojekt.ItsecprojektApplication - Started ItsecprojektApplication in 3.002 seconds (process running for 3.473)
+2024-06-11 13:35:07 [http-nio-8080-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-06-11 13:35:07 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-06-11 13:35:07 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2024-06-11 13:39:49 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-06-11 13:39:49 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-06-11 13:39:49 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

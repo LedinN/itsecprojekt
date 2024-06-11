@@ -30,7 +30,7 @@ public class MyController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult) {
+    public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             System.out.println("ERRORS"); // REPLACE WITH LOGGER
             return "register";

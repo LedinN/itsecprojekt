@@ -40,6 +40,10 @@ public class MyUserDetailsService implements UserDetailsService {
             adminUser.setEmail(adminUsername);
             adminUser.setPassword(passwordEncoder.encode("password"));
             adminUser.setRole("ADMIN");
+            adminUser.setAge(28);
+            adminUser.setFirstname("Ad");
+            adminUser.setLastname("min");
+            adminUser.setId(1L);
             userRepository.save(adminUser);
         }
     }

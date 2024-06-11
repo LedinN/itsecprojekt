@@ -5,6 +5,7 @@
     <title>Hej hej</title>
 </head>
 <body>
-<p>Welcome, <span th:text="${#authentication.name}">User</span>!</p>
+<p>You are now logged in as: <span th:text="${#authentication.name}"></span>, Welcome!</p>
+<a href="/logout">Logout</a>
 </body>
 </html>

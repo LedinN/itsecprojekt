@@ -31,7 +31,6 @@ public class DTOUser {
     @Max(120)
     private int age;
 
-    // Getters and Setters
     public String getEmail() {
         return email;
     }

@@ -14,14 +14,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+/*
+Konfigurerar säkerhetsinställningarna för Spring.
 
+securityChain sätter regler för våra endpoints, vilka roller som får åtkomst till vad, även vart man dirigeras vid lyckas/misslyckad inloggning.
+
+passwordEncoder hashar lösenord.
+
+ */
 @Configuration
 public class SecurityConfig {
 
     @Autowired
     private UserRepository userRepository;
-
-
 
     @Bean
     public SecurityFilterChain securityChain(HttpSecurity http) throws Exception {
@@ -52,14 +57,14 @@ public class SecurityConfig {
         return new MyUserDetailsService(userRepository, passwordEncoder());
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            HttpSecurity http, DaoAuthenticationProvider daoAuthenticationProvider) throws Exception {
-        AuthenticationManager manager = http.getSharedObject(AuthenticationManagerBuilder.class)
-                .authenticationProvider(daoAuthenticationProvider)
-                .build();
-        return manager;
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(
+//            HttpSecurity http, DaoAuthenticationProvider daoAuthenticationProvider) throws Exception {
+//        AuthenticationManager manager = http.getSharedObject(AuthenticationManagerBuilder.class)
+//                .authenticationProvider(daoAuthenticationProvider)
+//                .build();
+//        return manager;
+//    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) throws Exception {

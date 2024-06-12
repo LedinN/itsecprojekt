@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.HtmlUtils;
 
-
+/*
+Denna klass hanterar våra endpoints och tillhörande logik (Sparar användare till repository, "tvättar" strängar från eventuellt skadlig kod.)
+ */
 @Controller
 public class MyController {
 
@@ -56,7 +58,6 @@ public class MyController {
         model.addAttribute("successMessage", user.getEmail()+" registered successfully");
 
         logger.info("User registered successfully", user.getEmail());
-
 
         return "register_success";
     }

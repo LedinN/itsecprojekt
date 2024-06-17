@@ -33,29 +33,29 @@ class MyControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @DisplayName("Testing Authorization")
-    @WithMockUser(username = "niick")
-    @Test
-    void testRegistrationWithoutAuth() throws Exception {
-        mockMvc.perform(get("/register"))
-                .andExpect(status().isForbidden());
-    }
+
 
 
     @WithMockUser( )
     @Test
-    void testStartPageWithAuth() throws Exception {
+    void testStartPageEndpointWithAuth() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("startpage"));
     }
 
 
-
+    @DisplayName("Testing registration Authorization")
+    @WithMockUser(username = "niick")
+    @Test
+    void testRegistrationEndpointWithoutAuth() throws Exception {
+        mockMvc.perform(get("/register"))
+                .andExpect(status().isForbidden());
+    }
 
     @Test
     @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
-    void testRegisterPage() throws Exception {
+    void testRegisterPageEndpoint() throws Exception {
         mockMvc.perform(get("/register"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"));
@@ -63,9 +63,23 @@ class MyControllerTest {
 
     @Test
     @WithMockUser(username = "NIiiuuiiuick")
-    void testDeleteUserWithoutAuth () throws Exception {
+    void testDeleteUserEndpointWithoutAuth () throws Exception {
         mockMvc.perform(get("http://localhost:8080/delete_user"))
                 .andExpect(status().isForbidden());
 
     }
+
+    @Test
+    @WithMockUser(username = "OGADMIN", roles = {"ADMIN"})
+    void testDeleteUserEndpointWithAuth () throws Exception {
+        mockMvc.perform(get("http://localhost:8080/delete_user"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("delete_user"));
+
+
+    }
+
+    @
+
+
 }

@@ -26,9 +26,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
-                                .requestMatchers("remove_user", "update_user","/register").hasRole("ADMIN")
+                                .requestMatchers("/remove_user", "/update_user","/register").hasRole("ADMIN")
                                 .requestMatchers("/").hasAnyRole("USER","ADMIN")
-                                .requestMatchers("/login", "logout").permitAll()
+                                .requestMatchers("/login", "/logout").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(

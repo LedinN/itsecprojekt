@@ -12,6 +12,6 @@ public class MaskingUtils {
             return "***" + email.substring(index);
         }
 
-        return email.substring(0, 1) + "***" + email.substring(index - 1);
+        return email.charAt(0) + "***" + email.substring(index - 1);
     }
 }

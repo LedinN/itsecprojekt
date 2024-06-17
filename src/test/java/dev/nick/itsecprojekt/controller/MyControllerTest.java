@@ -47,6 +47,7 @@ class MyControllerTest {
                 .andExpect(status().isForbidden());
     }
 
+
     @Test
     @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
     void testRegisterPage() throws Exception {
@@ -58,7 +59,7 @@ class MyControllerTest {
 
     @WithMockUser(username = "Nick")
     @Test
-    void testStartPageWithAuth() throws Exception {
+    void testStartPageEndpointWithAuth() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("startpage"));
@@ -78,18 +79,27 @@ class MyControllerTest {
         mockMvc.perform(get("/update_password"))
                 .andExpect(status().isForbidden());
     }
+        
+    @DisplayName("Testing registration Authorization")
+    @WithMockUser(username = "niick")
+    @Test
+    void testRegistrationEndpointWithoutAuth() throws Exception {
+        mockMvc.perform(get("/register"))
+                .andExpect(status().isForbidden());
+    }
 
     @Test
     @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
     void testUpdateUserWithAuth() throws Exception {
         mockMvc.perform(get("/update_user"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("update_user"));
-    }
+          .andExpect(status().isOk())
+          .andExpect(view().name("update_user"));
+
     @Test
-    @WithMockUser
-    void testUpdateUserWithoutAuth() throws Exception {
-        mockMvc.perform(get("/update_user"))
+    @WithMockUser(username = "NIiiuuiiuick")
+    void testDeleteUserEndpointWithoutAuth () throws Exception {
+        mockMvc.perform(get("http://localhost:8080/delete_user"))
+
                 .andExpect(status().isForbidden());
     }
 
@@ -137,4 +147,18 @@ class MyControllerTest {
                 .andExpect(model().attributeHasFieldErrors("user", "email"))
                 .andExpect(model().attributeHasFieldErrorCode("user", "email", "Email"));
     }
+
+    @Test
+    @WithMockUser(username = "OGADMIN", roles = {"ADMIN"})
+    void testDeleteUserEndpointWithAuth () throws Exception {
+        mockMvc.perform(get("http://localhost:8080/delete_user"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("delete_user"));
+
+
+    }
+
+    @
+
+
 }

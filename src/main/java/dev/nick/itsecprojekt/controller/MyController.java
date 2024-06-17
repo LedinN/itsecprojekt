@@ -43,7 +43,6 @@ public class MyController {
 
     public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-
            logger.error("Error while creating new user");
             return "register";
         }
@@ -58,7 +57,7 @@ public class MyController {
         user.setAge(DTOuser.getAge());
         userRepository.save(user);
 
-        model.addAttribute("successMessage", user.getEmail()+" registered successfully");
+        model.addAttribute("successMessage", user.getEmail() + " registered successfully");
 
         logger.info("User registered successfully", user.getEmail());
 
@@ -78,8 +77,11 @@ public class MyController {
 
     @PostMapping("/delete_user")
     public String delete_user(@RequestParam("email") String email, Model model) {
+
         String escapedEmail = HtmlUtils.htmlEscape(email);
+
         MyUser user = userRepository.findByEmail(escapedEmail);
+
         if (user != null) {
             userRepository.delete(user);
             model.addAttribute("deletedUserEmail", user.getEmail());

@@ -42,7 +42,7 @@ public class SecurityConfig {
                                 .requestMatchers("/login", "/logout").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .formLogin(
+        .formLogin(
                         formLogin -> formLogin
                                 .defaultSuccessUrl("/", true)
                                 .failureUrl("/login?error=true")

@@ -3,6 +3,7 @@ package dev.nick.itsecprojekt.controller;
 import dev.nick.itsecprojekt.DTOUser;
 import dev.nick.itsecprojekt.persistence.MyUser;
 import dev.nick.itsecprojekt.persistence.UserRepository;
+import dev.nick.itsecprojekt.utils.MaskingUtils;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MyController {
+
+
 
     private static final Logger logger = LoggerFactory.getLogger(MyController.class);
 
@@ -51,7 +54,8 @@ public class MyController {
 
         model.addAttribute("successMessage", user.getEmail()+" registered successfully");
 
-        logger.info("User registered successfully", user.getEmail());
+
+        logger.debug("Creating user", user.getEmail());
 
 
         return "register_success";
@@ -73,12 +77,20 @@ public class MyController {
         MyUser user = userRepository.findByEmail(email);
         if (user != null) {
             userRepository.delete(user);
+
             model.addAttribute("deletedUserEmail", user.getEmail());
+
             logger.info("User deleted successfully", user.getEmail());
+            logger.debug("User " + MaskingUtils.anonymize(user.getEmail()) + " was deleted from database");
+
+
             return "delete_success";
         } else {
             model.addAttribute("errorMessage", email+" not found");
-            logger.info("User Not Found");
+
+            logger.warn("User " + MaskingUtils.anonymize(user.getEmail()) + " not found");
+            logger.debug("Debugging " + user.getEmail());
+
             return "delete_user";
         }
     }

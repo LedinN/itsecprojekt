@@ -135,7 +135,7 @@ public class MyController {
             user.setPassword(passwordEncoder.encode(passwordUpdateDTO.getNewPassword()));
             userRepository.save(user);
             model.addAttribute("successMessage", "Password updated successfully");
-            return "update_password_success";
+            return "update_password_successful";
         } else {
             model.addAttribute("errorMessage", "User not found");
             return "update_password";

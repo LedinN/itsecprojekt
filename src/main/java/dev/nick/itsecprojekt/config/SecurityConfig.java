@@ -33,7 +33,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
-                                .requestMatchers("remove_user", "update_user","/register").hasRole("ADMIN")
+                                .requestMatchers("remove_user", "update_user","register","update_password","delete_user","register_success").hasRole("ADMIN")
                                 .requestMatchers("/").hasAnyRole("USER","ADMIN")
                                 .requestMatchers("/login", "logout").permitAll()
                                 .anyRequest().authenticated()
@@ -57,14 +57,14 @@ public class SecurityConfig {
         return new MyUserDetailsService(userRepository, passwordEncoder());
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(
-//            HttpSecurity http, DaoAuthenticationProvider daoAuthenticationProvider) throws Exception {
-//        AuthenticationManager manager = http.getSharedObject(AuthenticationManagerBuilder.class)
-//                .authenticationProvider(daoAuthenticationProvider)
-//                .build();
-//        return manager;
-//    }
+    @Bean
+    public AuthenticationManager authenticationManager(
+            HttpSecurity http, DaoAuthenticationProvider daoAuthenticationProvider) throws Exception {
+        AuthenticationManager manager = http.getSharedObject(AuthenticationManagerBuilder.class)
+                .authenticationProvider(daoAuthenticationProvider)
+                .build();
+        return manager;
+    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) throws Exception {

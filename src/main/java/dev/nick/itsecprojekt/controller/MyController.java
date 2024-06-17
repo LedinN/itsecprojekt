@@ -1,6 +1,7 @@
 package dev.nick.itsecprojekt.controller;
 
 import dev.nick.itsecprojekt.DTOUser;
+import dev.nick.itsecprojekt.PasswordUpdateDTO;
 import dev.nick.itsecprojekt.persistence.MyUser;
 import dev.nick.itsecprojekt.persistence.UserRepository;
 import dev.nick.itsecprojekt.utils.MaskingUtils;
@@ -40,7 +41,6 @@ public class MyController {
     }
 
     @PostMapping("/register")
-
     public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
 

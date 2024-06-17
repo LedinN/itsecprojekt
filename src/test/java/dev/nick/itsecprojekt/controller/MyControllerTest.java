@@ -35,11 +35,12 @@ class MyControllerTest {
     @DisplayName("Testing Authorization")
     @Test
     void testRegistrationWithoutAuth() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/register")
+        mockMvc.perform(get("http://localhost:8080/register")
                                 .with(user("USER")
                                 .roles("USER")
                                 .password("password")))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(view().name("register"));
 
 
     }

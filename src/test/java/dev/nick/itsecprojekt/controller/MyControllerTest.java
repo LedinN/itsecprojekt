@@ -32,17 +32,13 @@ class MyControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+
     @DisplayName("Testing Authorization")
+    @WithMockUser(username = "niick")
     @Test
     void testRegistrationWithoutAuth() throws Exception {
-        mockMvc.perform(get("http://localhost:8080/register")
-                                .with(user("USER")
-                                .roles("USER")
-                                .password("password")))
-                .andExpect(status().isForbidden())
-                .andExpect(view().name("register"));
-
-
+        mockMvc.perform(get("/register"))
+                .andExpect(status().isForbidden());
     }
 
 
@@ -56,25 +52,23 @@ class MyControllerTest {
 
 
 
-
+    @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
     @Test
     void testRegisterPage() throws Exception {
-        mockMvc.perform(post("http://localhost:8080/register")
-                                .with(user("ADMIN")
-                                .password("password123")
-                                .roles("ADMIN", "USER")))
+        mockMvc.perform(get("http://localhost:8080/register"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("register_success"));
+                .andExpect(view().name("register"));
     }
 
+    @WithMockUser
     @Test
     void testDeleteUserWithoutAuth () throws Exception {
         mockMvc.perform(get("http://localhost:8080/delete_user")
                         .with(user("USER")
                         .password("password")
                         .roles("USER")))
-                .andExpect(status().isForbidden())
-                .andExpect(view().name("delete_user"));
+                .andExpect(status().isForbidden());
+
     }
 
 

@@ -5,6 +5,13 @@
     <title>Hej hej</title>
 </head>
 <body>
-<p>Welcome, <span th:text="${#authentication.name}">User</span>!</p>
+<p>You are now logged in as: <span th:text="${#authentication.name}"></span>, Welcome!</p>
+<ul>
+    <li><a href="/register">Register a new user</a></li>
+    <li><a href="/delete_user">Delete a user</a></li>
+    <li><a href="/update_user">Update a user</a></li>
+    <li><a href="/update_password">Update a users password</a></li>
+    <li><a href="/logout">Logout</a></li>
+</ul>
 </body>
 </html>

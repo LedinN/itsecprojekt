@@ -16,8 +16,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+/*
+Konfigurerar säkerhetsinställningarna för Spring.
 
-@EnableWebSecurity
+securityChain sätter regler för våra endpoints, vilka roller som får åtkomst till vad, även vart man dirigeras vid lyckas/misslyckad inloggning.
+
+passwordEncoder hashar lösenord.
+
+ */
 @Configuration
 public class SecurityConfig {
 
@@ -31,18 +37,17 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
-                                .requestMatchers("remove_user", "update_user","/register").hasRole("ADMIN")
+                                .requestMatchers("remove_user", "update_user","register","update_password","delete_user","register_success").hasRole("ADMIN")
                                 .requestMatchers("/").hasAnyRole("USER","ADMIN")
                                 .requestMatchers("/login", "logout").permitAll()
-                                .anyRequest().authenticated())
-
+                                .anyRequest().authenticated()
+                )
                 .formLogin(
                         formLogin -> formLogin
                                 .defaultSuccessUrl("/", true)
                                 .failureUrl("/login?error=true")
                                 .permitAll()
                 ).csrf(Customizer.withDefaults());
-
         return http.build();
     }
 

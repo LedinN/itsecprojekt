@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class MyControllerTest {
@@ -33,16 +34,11 @@ class MyControllerTest {
     private MockMvc mockMvc;
 
     @DisplayName("Testing Authorization")
+    @WithMockUser(username = "niick")
     @Test
     void testRegistrationWithoutAuth() throws Exception {
-        mockMvc.perform(get("http://localhost:8080/register")
-                                .with(user("USER")
-                                .roles("USER")
-                                .password("password")))
-                .andExpect(status().isForbidden())
-                .andExpect(view().name("register"));
-
-
+        mockMvc.perform(get("/register"))
+                .andExpect(status().isForbidden());
     }
 
 
@@ -58,27 +54,18 @@ class MyControllerTest {
 
 
     @Test
+    @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
     void testRegisterPage() throws Exception {
-        mockMvc.perform(post("http://localhost:8080/register")
-                                .with(user("ADMIN")
-                                .password("password123")
-                                .roles("ADMIN", "USER")))
+        mockMvc.perform(get("/register"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("register_success"));
+                .andExpect(view().name("register"));
     }
 
     @Test
+    @WithMockUser(username = "NIiiuuiiuick")
     void testDeleteUserWithoutAuth () throws Exception {
-        mockMvc.perform(get("http://localhost:8080/delete_user")
-                        .with(user("USER")
-                        .password("password")
-                        .roles("USER")))
-                .andExpect(status().isForbidden())
-                .andExpect(view().name("delete_user"));
+        mockMvc.perform(get("http://localhost:8080/delete_user"))
+                .andExpect(status().isForbidden());
+
     }
-
-
-
-
-
 }

@@ -56,7 +56,6 @@ public class MyController {
         user.setLastname(DTOuser.getLastname());
         user.setAge(DTOuser.getAge());
         userRepository.save(user);
-
         model.addAttribute("successMessage", user.getEmail() + " registered successfully");
 
 

@@ -4,6 +4,7 @@ import dev.nick.itsecprojekt.DTOUser;
 import dev.nick.itsecprojekt.PasswordUpdateDTO;
 import dev.nick.itsecprojekt.persistence.MyUser;
 import dev.nick.itsecprojekt.persistence.UserRepository;
+import dev.nick.itsecprojekt.utils.MaskingUtils;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +41,8 @@ public class MyController {
     }
 
     @PostMapping("/register")
-
     public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-
            logger.error("Error while creating new user");
             return "register";
         }
@@ -58,9 +57,11 @@ public class MyController {
         user.setAge(DTOuser.getAge());
         userRepository.save(user);
 
-        model.addAttribute("successMessage", user.getEmail()+" registered successfully");
+        model.addAttribute("successMessage", user.getEmail() + " registered successfully");
 
-        logger.info("User registered successfully", user.getEmail());
+
+        logger.debug("Creating user", user.getEmail());
+
 
         return "register_success";
     }
@@ -78,16 +79,29 @@ public class MyController {
 
     @PostMapping("/delete_user")
     public String delete_user(@RequestParam("email") String email, Model model) {
+
         String escapedEmail = HtmlUtils.htmlEscape(email);
+
         MyUser user = userRepository.findByEmail(escapedEmail);
+
         if (user != null) {
             userRepository.delete(user);
+
             model.addAttribute("deletedUserEmail", user.getEmail());
+
             logger.info("User deleted successfully", user.getEmail());
+            logger.debug("User " + MaskingUtils.anonymize(user.getEmail()) + " was deleted from database");
+
+
             return "delete_success";
         } else {
             model.addAttribute("errorMessage", escapedEmail+" not found");
             logger.info("User Not Found");
+            model.addAttribute("errorMessage", email+" not found");
+
+            logger.warn("User " + MaskingUtils.anonymize(user.getEmail()) + " not found");
+            logger.debug("Debugging " + user.getEmail());
+
             return "delete_user";
         }
     }

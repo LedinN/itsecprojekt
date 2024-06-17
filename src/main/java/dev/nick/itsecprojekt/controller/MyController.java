@@ -43,8 +43,8 @@ public class MyController {
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-
            logger.error("Error while creating new user");
+
             return "register";
         }
 
@@ -58,10 +58,11 @@ public class MyController {
         user.setAge(DTOuser.getAge());
         userRepository.save(user);
 
-        model.addAttribute("successMessage", user.getEmail()+" registered successfully");
+        model.addAttribute("successMessage", user.getEmail() + " registered successfully");
 
 
         logger.debug("Creating user", user.getEmail());
+        logger.warn("User " +  MaskingUtils.anonymize(user.getEmail()) + " was created");
 
 
         return "register_success";
@@ -80,15 +81,18 @@ public class MyController {
 
     @PostMapping("/delete_user")
     public String delete_user(@RequestParam("email") String email, Model model) {
+
         String escapedEmail = HtmlUtils.htmlEscape(email);
+
         MyUser user = userRepository.findByEmail(escapedEmail);
+
         if (user != null) {
             userRepository.delete(user);
 
             model.addAttribute("deletedUserEmail", user.getEmail());
 
             logger.info("User deleted successfully", user.getEmail());
-            logger.debug("User " + MaskingUtils.anonymize(user.getEmail()) + " was deleted from database");
+            logger.warn("User " + MaskingUtils.anonymize(user.getEmail()) + " was deleted from database");
 
 
             return "delete_success";
@@ -113,6 +117,7 @@ public class MyController {
     @PostMapping("/update_user")
     public String updateUser(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            logger.error("Error updating user");
             return "update_user";
         }
         MyUser user = userRepository.findByEmail(DTOuser.getEmail());
@@ -124,9 +129,13 @@ public class MyController {
             user.setAge(DTOuser.getAge());
             userRepository.save(user);
             model.addAttribute("successMessage", "User updated successfully");
+
+            logger.warn("User " +  MaskingUtils.anonymize(user.getEmail()) + " was updated");
+
             return "update_success";
         } else {
             model.addAttribute("errorMessage", "User not found");
+
             return "update_user";
         }
     }
@@ -140,6 +149,8 @@ public class MyController {
     @PostMapping("/update_password")
     public String updatePassword(@Valid @ModelAttribute("passwordUpdateDTO") PasswordUpdateDTO passwordUpdateDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            logger.error("Password was not updated");
+
             return "update_password";
         }
         MyUser user = userRepository.findByEmail(passwordUpdateDTO.getEmail());
@@ -147,6 +158,9 @@ public class MyController {
             user.setPassword(passwordEncoder.encode(passwordUpdateDTO.getNewPassword()));
             userRepository.save(user);
             model.addAttribute("successMessage", "Password updated successfully");
+
+            logger.warn("User " +  MaskingUtils.anonymize(user.getEmail()) + " update password successful");
+
             return "update_password_successful";
         } else {
             model.addAttribute("errorMessage", "User not found");

@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class MyControllerTest {
@@ -33,46 +34,52 @@ class MyControllerTest {
     private MockMvc mockMvc;
 
 
-    @DisplayName("Testing Authorization")
-    @WithMockUser(username = "niick")
-    @Test
-    void testRegistrationWithoutAuth() throws Exception {
-        mockMvc.perform(get("/register"))
-                .andExpect(status().isForbidden());
-    }
 
 
     @WithMockUser( )
     @Test
-    void testStartPageWithAuth() throws Exception {
+    void testStartPageEndpointWithAuth() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("startpage"));
     }
 
 
-
-    @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
+    @DisplayName("Testing registration Authorization")
+    @WithMockUser(username = "niick")
     @Test
-    void testRegisterPage() throws Exception {
-        mockMvc.perform(get("http://localhost:8080/register"))
+    void testRegistrationEndpointWithoutAuth() throws Exception {
+        mockMvc.perform(get("/register"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
+    void testRegisterPageEndpoint() throws Exception {
+        mockMvc.perform(get("/register"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"));
     }
 
-    @WithMockUser
     @Test
-    void testDeleteUserWithoutAuth () throws Exception {
-        mockMvc.perform(get("http://localhost:8080/delete_user")
-                        .with(user("USER")
-                        .password("password")
-                        .roles("USER")))
+    @WithMockUser(username = "NIiiuuiiuick")
+    void testDeleteUserEndpointWithoutAuth () throws Exception {
+        mockMvc.perform(get("http://localhost:8080/delete_user"))
                 .andExpect(status().isForbidden());
 
     }
 
+    @Test
+    @WithMockUser(username = "OGADMIN", roles = {"ADMIN"})
+    void testDeleteUserEndpointWithAuth () throws Exception {
+        mockMvc.perform(get("http://localhost:8080/delete_user"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("delete_user"));
 
 
+    }
+
+    @
 
 
 }

@@ -5,7 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
-
+/*
+Denna klass är en Data Transfer Object-klass som vi använder för att skapa nya användare.
+Innehåller valideringsregler för samtliga fält som användaren skriver in.
+Även getters/setter för fälten.
+ */
 public class DTOUser {
 
     @NotBlank

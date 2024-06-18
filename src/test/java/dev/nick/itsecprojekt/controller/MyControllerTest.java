@@ -112,7 +112,7 @@ class MyControllerTest {
     void testUpdateUserWithAuth() throws Exception {
         mockMvc.perform(get("/update_user"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/update_user"));
+                .andExpect(view().name("update_user"));
     }
 
     @Test

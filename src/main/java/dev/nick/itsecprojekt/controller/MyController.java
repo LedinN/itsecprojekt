@@ -59,7 +59,6 @@ public class MyController {
         userRepository.save(user);
         model.addAttribute("successMessage", user.getEmail() + " registered successfully");
 
-
         logger.debug("Creating user", user.getEmail());
         logger.warn("User " +  MaskingUtils.anonymize(user.getEmail()) + " was created");
 

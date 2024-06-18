@@ -30,6 +30,20 @@ public class MyUserDetailsService implements UserDetailsService {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
     }
 
+    /* Denna metod körs automatiskt efter att bean-initialiseringen är klar.
+    Metoden skapar en administratörsanvändare om ingen sådan redan finns i databasen.
+Först definieras standard användarnamn för administratören.
+Den letar efter en användare med detta e-postnamn i databasen.
+Om ingen användare hittas, skapas en ny MyUser-instans med fördefinierade attribut:
+    E-post: adminUsername
+    Lösenord: krypterat(password)
+    Roll: ADMIN
+    Ålder: 28
+    Förnamn: Ad
+    Efternamn: min
+    ID: 1
+    Den nya adminanvändaren sparas sedan i databasen.
+*/
     @PostConstruct
     public void createAdminUser() {
         String adminUsername = "OGadmin";

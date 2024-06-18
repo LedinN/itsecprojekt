@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -40,6 +42,7 @@ class MyControllerTest {
 
     private MyUser testUser;
 
+    /** Vi skapar upp ett objekt som vi kan använda för att mocka data  */
     @BeforeEach
     void setup() {
         testUser = new MyUser();
@@ -55,6 +58,7 @@ class MyControllerTest {
 
     /**TODO - TESTING GET*/
 
+    /*Testar att vi kommer in på startsidan med autentisering där all roller är tillåtna */
     @DisplayName("Testing GET startpage with authorization")
     @Test
     @WithMockUser
@@ -63,8 +67,7 @@ class MyControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("startpage"));
     }
-
-
+    /*Testar om vi kommer in på registrerings sidan som en vanlig användare utan admin rollen*/
     @DisplayName("Testing GET registration authorization")
     @Test
     @WithMockUser(username = "niick")
@@ -72,7 +75,7 @@ class MyControllerTest {
         mockMvc.perform(get("/register"))
                 .andExpect(status().isForbidden());
     }
-
+    /*Testar om det går att nå registrerings sidan med admin roll*/
     @DisplayName("Testing GET register with authorization ")
     @Test
     @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
@@ -81,7 +84,7 @@ class MyControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"));
     }
-
+    /*Testar om en användare kommer åt registrerings sidan utan admin roll*/
     @DisplayName("Testing GET delete user without authorization")
     @Test
     @WithMockUser(username = "NIiiuuiiuick")
@@ -90,7 +93,7 @@ class MyControllerTest {
                 .andExpect(status().isForbidden());
 
     }
-
+    /*Testar om en användare kommer åt registrerings sidan med admin roll*/
     @DisplayName("Testing GET delete user with authorization")
     @Test
     @WithMockUser(username = "OGADMIN", roles = {"ADMIN"})
@@ -103,26 +106,66 @@ class MyControllerTest {
     }
 
 
+    /**TODO - TESTING POST*/
+    /*Testar om om vi kan ta bort en användare med admin roll*/
+     @DisplayName("Testing POST delete user")
+     @Test
+     @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
+     void testSuccessfulDeleteUser() throws Exception {
+         String userEmail = "user@example.com";
+         MyUser user = new MyUser();
+         user.setEmail(userEmail);
 
- /**TODO - TESTING POST*/
+         Mockito.when(userRepository.findByEmail(userEmail)).thenReturn(user);
 
- @DisplayName("Testing POST update password")
- @Test
- @WithMockUser(username = "OGADMIN" , roles = {"ADMIN"})
- void test_POST_Update_Password() throws Exception {
-     mockMvc.perform(post("/update_password")
-                     .with(csrf())
-                     .param("email", "test@example.com")
-                     .param("newPassword", "newpassword"))
-             .andExpect(status().isOk())
-             .andExpect(view().name("update_password_successful"))
-             .andExpect(model().attributeExists("successMessage"));
- }
+         mockMvc.perform(post("/delete_user")
+                         .param("email", userEmail)
+                         .with(csrf()))
+                 .andExpect(status().isOk())
+                 .andExpect(view().name("delete_success"))
+                 .andExpect(model().attribute("deletedUserEmail", userEmail));
+     }
 
 
+    /* Test som testar en felaktig registrering, men vi kollar om den får status 200 från början när den går in på sidan, vilket stämmer.
+    sedan så får vi också tillbaka att email adressen är felaktig och vi får ett nytt försök att ändra det. Vi får error på felmeddelandet.
+    Varför vi har med isOK är för att vi aldrig får en 400 vid felaktig inmatning, utan det kommer en pop-up istället när man försöker regga.
+     */
+
+    @DisplayName("Testing POST invalid email ")
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    void failedUserRegistrationInvalidEmail() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/register")
+                        .param("email", "invalid-email")
+                        .param("password", "validPassword1")
+                        .param("role", "USER")
+                        .param("firstname", "John")
+                        .param("lastname", "Doe")
+                        .param("age", "25")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("user", "email"))
+                .andExpect(model().attributeHasFieldErrorCode("user", "email", "Email"));
+    }
+    /*Testar om man kan uppdatera lösen ord på en användare med admin roll*/
+     @DisplayName("Testing POST update password")
+     @Test
+     @WithMockUser(username = "OGADMIN" , roles = {"ADMIN"})
+     void test_POST_Update_Password() throws Exception {
+         mockMvc.perform(post("/update_password")
+                         .with(csrf())
+                         .param("email", "test@example.com")
+                         .param("newPassword", "newpassword"))
+                 .andExpect(status().isOk())
+                 .andExpect(view().name("update_password_successful"))
+                 .andExpect(model().attributeExists("successMessage"));
+     }
+
+    /*Testar felhanteringen i våran lösenords endpoint när inte en användare hittas */
     @DisplayName("Testing POST update password - user not found")
     @Test
-    @WithMockUser(username = "OGADMIN", roles = {"ADMIN"})
+    @WithMockUser(roles = {"ADMIN"})
     void test_POST_Update_Password_Not_Found() throws Exception {
         Mockito.when(userRepository.findByEmail("notfound@example.com")).thenReturn(null);
         mockMvc.perform(post("/update_password")
@@ -133,7 +176,7 @@ class MyControllerTest {
                 .andExpect(view().name("update_password"))
                 .andExpect(model().attributeExists("errorMessage"));
     }
-
+    /*Testar om vi kan ta bort en användare med admin roll*/
     @DisplayName("Testing POST delete user - successful deletion")
     @Test
     @WithMockUser(roles = "ADMIN")
@@ -147,11 +190,4 @@ class MyControllerTest {
 
         Mockito.verify(userRepository, Mockito.times(1)).delete(testUser);
     }
-
-
-
-
-
-
-
 }

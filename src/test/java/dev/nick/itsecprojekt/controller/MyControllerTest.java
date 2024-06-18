@@ -103,22 +103,24 @@ class MyControllerTest {
     }
 
 
-    @DisplayName("Testing POST update password")
-    @Test
-    @WithMockUser(username = "OGADMIN" , roles = {"ADMIN"})
-    void test_POST_Update_Password() throws Exception {
-        mockMvc.perform(post("/update_password")
-                        .with(csrf())
-                        .param("email", "test@example.com")
-                        .param("newPassword", "newpassword"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("update_password_successful"))
-                .andExpect(model().attributeExists("successMessage"));
-    }
 
  /**TODO - TESTING POST*/
 
- @DisplayName("Testing POST update password - user not found")
+ @DisplayName("Testing POST update password")
+ @Test
+ @WithMockUser(username = "OGADMIN" , roles = {"ADMIN"})
+ void test_POST_Update_Password() throws Exception {
+     mockMvc.perform(post("/update_password")
+                     .with(csrf())
+                     .param("email", "test@example.com")
+                     .param("newPassword", "newpassword"))
+             .andExpect(status().isOk())
+             .andExpect(view().name("update_password_successful"))
+             .andExpect(model().attributeExists("successMessage"));
+ }
+
+
+    @DisplayName("Testing POST update password - user not found")
     @Test
     @WithMockUser(username = "OGADMIN", roles = {"ADMIN"})
     void test_POST_Update_Password_Not_Found() throws Exception {

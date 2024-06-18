@@ -4,6 +4,13 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 
+/*
+Denna klass representerar vad som ska sparas i vår databas.
+Vi använder annotationerna @Entity och @Table för att markera att detta är en databasentitet.
+Varje fält i klassen motsvarar en kolumn i databastabellen, specificerat med @Column.
+Första fältet är id, som är unikt för varje användare och genereras automatiskt.
+*/
+
 @Entity
 @Table
 public class MyUser implements Serializable {

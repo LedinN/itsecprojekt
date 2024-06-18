@@ -6,11 +6,23 @@ import dev.nick.itsecprojekt.persistence.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/*
+  UserService är en klass som ansvarar för att hantera användaruppdateringar i systemet.
+
+ Denna klass använder sig av UserRepository för att interagera med databasen och en PasswordEncoder
+  för att hantera kryptering av lösenord.
+
+ Metoder:
+updateUser(DTOUser dtoUser): Uppdaterar en användares information baserat på data från ett DTOUser-objekt.
+Om användaren inte finns i databasen kastas ett exception.
+
+ */
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;

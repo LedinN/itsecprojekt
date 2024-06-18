@@ -4,6 +4,7 @@ import dev.nick.itsecprojekt.DTOUser;
 import dev.nick.itsecprojekt.PasswordUpdateDTO;
 import dev.nick.itsecprojekt.persistence.MyUser;
 import dev.nick.itsecprojekt.persistence.UserRepository;
+import dev.nick.itsecprojekt.service.UserService;
 import dev.nick.itsecprojekt.utils.MaskingUtils;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -28,10 +29,12 @@ public class MyController {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public MyController(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public MyController(PasswordEncoder passwordEncoder, UserRepository userRepository, UserService userService) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @GetMapping("/register")
@@ -118,22 +121,14 @@ public class MyController {
             logger.error("Error updating user");
             return "update_user";
         }
-        MyUser user = userRepository.findByEmail(DTOuser.getEmail());
-        if (user != null) {
-            user.setPassword(passwordEncoder.encode(DTOuser.getPassword()));
-            user.setRole(DTOuser.getRole());
-            user.setFirstname(DTOuser.getFirstname());
-            user.setLastname(DTOuser.getLastname());
-            user.setAge(DTOuser.getAge());
-            userRepository.save(user);
+
+        try {
+            userService.updateUser(DTOuser);
             model.addAttribute("successMessage", "User updated successfully");
-
-            logger.warn("User " +  MaskingUtils.anonymize(user.getEmail()) + " was updated");
-
+            logger.warn("User " + MaskingUtils.anonymize(DTOuser.getEmail()) + " was updated");
             return "update_success";
-        } else {
+        } catch (IllegalArgumentException e) {
             model.addAttribute("errorMessage", "User not found");
-
             return "update_user";
         }
     }

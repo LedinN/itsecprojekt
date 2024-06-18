@@ -12,7 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 
 
 import java.util.Map;
-/* en controller för errors. Implementeras från den inbyggda gränssnittet ErrorController */
+/* En controller för errors. Implementeras från den inbyggda gränssnittet ErrorController */
 @Controller
 public class CustomErrorController implements ErrorController {
 

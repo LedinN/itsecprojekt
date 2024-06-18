@@ -12,15 +12,21 @@ import org.springframework.web.context.request.WebRequest;
 
 
 import java.util.Map;
-
+/* en controller för errors. Implementeras från den inbyggda gränssnittet ErrorController */
 @Controller
 public class CustomErrorController implements ErrorController {
 
+    /* instansering */
     private final ErrorAttributes errorAttributes;
 
+    /* konstruktor */
     public CustomErrorController(ErrorAttributes errorAttributes) {
         this.errorAttributes = errorAttributes;
     }
+
+   /* Hanterar felkoder genom att hämta statuskoden för felet och lägga till felattribut i modellen.
+    Beroende på vilken felkod som har dykt upp returnerar den ett specifikt felmeddelande / felmeddelandesida.
+*/
 
     @RequestMapping("/error")
     public String handleError(HttpServletRequest request, Model model) {
@@ -39,6 +45,11 @@ public class CustomErrorController implements ErrorController {
         return "error";
     }
 
+    /* Denna metod returnerar en map där nycklarna är strings och värdena är objekt.
+    Metoden getErrorAttributes tar emot en parameter (request) av typen HttpServletRequest.
+    errorAttributes.getErrorAttributes hämtar felattributen från  förfrågan och
+    ErrorAttributeOptions.defaults() anger att standardalternativ ska användas för att hämta dessa attribut.
+*/
     private Map<String, Object> getErrorAttributes(HttpServletRequest request) {
         return errorAttributes.getErrorAttributes((WebRequest) request, ErrorAttributeOptions.defaults());
     }

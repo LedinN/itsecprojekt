@@ -6,6 +6,7 @@ import dev.nick.itsecprojekt.persistence.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,7 +38,22 @@ class MyControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private UserRepository userRepository;
+    UserRepository userRepository;
+
+    private MyUser testUser;
+
+    @BeforeEach
+    void setup() {
+        testUser = new MyUser();
+        testUser.setEmail("test@example.com");
+        testUser.setPassword("password");
+        testUser.setRole("USER");
+        testUser.setFirstname("Test");
+        testUser.setLastname("User");
+        testUser.setAge(30);
+
+        Mockito.when(userRepository.findByEmail("test@example.com")).thenReturn(testUser);
+    }
 
     @DisplayName("Testing Authorization")
     @WithMockUser(username = "Nick")
@@ -46,6 +62,8 @@ class MyControllerTest {
         mockMvc.perform(get("/register"))
                 .andExpect(status().isForbidden());
     }
+
+    /**TODO - TESTING GET*/
 
     @Test
     @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
@@ -56,9 +74,11 @@ class MyControllerTest {
     }
 
 
-    @WithMockUser(username = "Nick")
+
+    @DisplayName("Testing GET startpage with authorization")
     @Test
-    void testStartPageWithAuth() throws Exception {
+    @WithMockUser
+    void testStartPageEndpointWithAuth() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("startpage"));
@@ -78,7 +98,7 @@ class MyControllerTest {
         mockMvc.perform(get("/update_password"))
                 .andExpect(status().isForbidden());
     }
-
+        
     @DisplayName("Testing registration Authorization")
     @WithMockUser(username = "niick")
     @Test
@@ -92,15 +112,16 @@ class MyControllerTest {
     void testUpdateUserWithAuth() throws Exception {
         mockMvc.perform(get("/update_user"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("update_user"));
+                .andExpect(view().name("/update_user"));
     }
+
     @Test
     @WithMockUser(username = "NIiiuuiiuick")
-    void testDeleteUserEndpointWithoutAuth () throws Exception {
-        mockMvc.perform(get("http://localhost:8080/delete_user"))
+        void testDeleteUserEndpointWithoutAuth () throws Exception {
+            mockMvc.perform(get("http://localhost:8080/delete_user"))
 
-                .andExpect(status().isForbidden());
-    }
+                    .andExpect(status().isForbidden());
+        }
 
     /* Ett test som testar om det går att delete en user.
     detta görs genom att vi har en mock user som är admin och vi skapar en user med en påhittad email.
@@ -109,6 +130,16 @@ class MyControllerTest {
     Vi kontrollerar också att vi blir redirected till rätt sida efter detta skett.
      */
 
+    @DisplayName("Testing GET delete user with authorization")
+    @Test
+    @WithMockUser(username = "OGADMIN", roles = {"ADMIN"})
+    void test_GET_Delete_User_With_Auth () throws Exception {
+        mockMvc.perform(get("http://localhost:8080/delete_user"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("delete_user"));
+
+
+    }
     @Test
     @WithMockUser(username = "ADMIN", roles = {"ADMIN"})
     void testSuccessfulDeleteUser() throws Exception {
@@ -156,4 +187,36 @@ class MyControllerTest {
 
 
     }
+
+    /**TODO - TESTING POST*/
+
+
+    @DisplayName("Testing POST update password - user not found")
+    @Test
+    @WithMockUser(username = "OGADMIN", roles = {"ADMIN"})
+    void test_POST_Update_Password_Not_Found() throws Exception {
+        Mockito.when(userRepository.findByEmail("notfound@example.com")).thenReturn(null);
+        mockMvc.perform(post("/update_password")
+                        .with(csrf())
+                        .param("email", "notfound@example.com")
+                        .param("newPassword", "newpassword"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("update_password"))
+                .andExpect(model().attributeExists("errorMessage"));
+    }
+
+    @DisplayName("Testing POST delete user - successful deletion")
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void test_POST_Delete_User_Endpoint_Success() throws Exception {
+        mockMvc.perform(post("/delete_user")
+                        .with(csrf())
+                        .param("email", "test@example.com"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("delete_success"))
+                .andExpect(model().attributeExists("deletedUserEmail"));
+
+        Mockito.verify(userRepository, Mockito.times(1)).delete(testUser);
+    }
+
 }

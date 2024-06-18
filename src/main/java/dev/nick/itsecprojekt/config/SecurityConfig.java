@@ -16,14 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-/*
-Konfigurerar säkerhetsinställningarna för Spring.
 
-securityChain sätter regler för våra endpoints, vilka roller som får åtkomst till vad, även vart man dirigeras vid lyckas/misslyckad inloggning.
-
-passwordEncoder hashar lösenord.
-
- */
+//Konfigurerar säkerhetsinställningarna för Spring.
 @Configuration
 public class SecurityConfig {
 
@@ -31,13 +25,22 @@ public class SecurityConfig {
     private UserRepository userRepository;
 
 
-
+ /*
+ Konfigurerar logiken för vilka roller som får komma åt vilka endpoints.
+ Konfigurerar formulärinloggning med URL:er för lyckad och misslyckad inloggning.
+  */
     @Bean
     public SecurityFilterChain securityChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
-                                .requestMatchers("/remove_user", "/update_user","/register","/update_password","/delete_user","/register_success").hasRole("ADMIN")
+                                .requestMatchers("/remove_user"
+                                        , "/update_user"
+                                        ,"/register"
+                                        ,"/update_password"
+                                        ,"/delete_user"
+                                        ,"/register_success")
+                                .hasRole("ADMIN")
                                 .requestMatchers("/").hasAnyRole("USER","ADMIN")
                                 .requestMatchers("/login", "/logout").permitAll()
                                 .anyRequest().authenticated()
@@ -51,16 +54,17 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // Hashar lösenord
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    // Tar in en anpassad variant av UserDetailsService.
     @Bean
     public UserDetailsService userDetailsService() {
         return new MyUserDetailsService(userRepository, passwordEncoder());
     }
-
+    // Konfigurerar AuthenticationManager med en DaoAuthenticationProvider
     @Bean
     public AuthenticationManager authenticationManager(
             HttpSecurity http, DaoAuthenticationProvider daoAuthenticationProvider) throws Exception {
@@ -69,7 +73,7 @@ public class SecurityConfig {
                 .build();
         return manager;
     }
-
+    // Konfigurerar en DaoAuthenticationProvider med ett UserDetailsService och en PasswordEncoder
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) throws Exception {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

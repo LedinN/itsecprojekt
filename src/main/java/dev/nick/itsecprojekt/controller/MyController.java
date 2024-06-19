@@ -27,12 +27,9 @@ Denna klass hanterar våra endpoints och tillhörande logik (Sparar användare t
 public class MyController {
 
     private static final Logger logger = LoggerFactory.getLogger(MyController.class);
-
-    private final PasswordEncoder passwordEncoder;
     private final UserService userService;
 
     public MyController(PasswordEncoder passwordEncoder, UserRepository userRepository, UserService userService) {
-        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
     }
 

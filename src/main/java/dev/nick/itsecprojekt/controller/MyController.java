@@ -46,25 +46,15 @@ public class MyController {
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("user") DTOUser DTOuser, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-           logger.error("Error while creating new user");
-
+            logger.error("Error while creating new user");
             return "register";
         }
 
-        String sanitizedEmail = HtmlUtils.htmlEscape(DTOuser.getEmail());
-        MyUser user = new MyUser();
-        user.setEmail(sanitizedEmail);
-        user.setPassword(passwordEncoder.encode(DTOuser.getPassword()));
-        user.setRole(DTOuser.getRole());
-        user.setFirstname(DTOuser.getFirstname());
-        user.setLastname(DTOuser.getLastname());
-        user.setAge(DTOuser.getAge());
-        userRepository.save(user);
-        model.addAttribute("successMessage", user.getEmail() + " registered successfully");
+        userService.registerUser(DTOuser);
+        model.addAttribute("successMessage", DTOuser.getEmail() + " registered successfully");
 
-        logger.debug("Creating user", user.getEmail());
-        logger.warn("User " +  MaskingUtils.anonymize(user.getEmail()) + " was created");
-
+        logger.debug("Creating user", DTOuser.getEmail());
+        logger.warn("User " + MaskingUtils.anonymize(DTOuser.getEmail()) + " was created");
 
         return "register_success";
     }

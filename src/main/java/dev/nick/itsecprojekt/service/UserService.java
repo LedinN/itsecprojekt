@@ -1,8 +1,10 @@
 package dev.nick.itsecprojekt.service;
 
 import dev.nick.itsecprojekt.DTOUser;
+import dev.nick.itsecprojekt.PasswordUpdateDTO;
 import dev.nick.itsecprojekt.persistence.MyUser;
 import dev.nick.itsecprojekt.persistence.UserRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
@@ -44,4 +46,29 @@ public class UserService {
         user.setAge(dtoUser.getAge());
         userRepository.save(user);
     }
+
+    public void deleteUser(String email) {
+
+       MyUser user = userRepository.findByEmail(email);
+
+       if (user != null) {
+           userRepository.delete(user);
+       }
+       else {
+           throw new UsernameNotFoundException(email);
+       }
+    }
+
+    public void updatePassword(PasswordUpdateDTO passwordUpdateDTO) {
+        MyUser user = userRepository.findByEmail(passwordUpdateDTO.getEmail());
+
+        if (user != null) {
+            user.setPassword(passwordEncoder.encode(passwordUpdateDTO.getNewPassword()));
+            userRepository.save(user);
+        }
+        else {
+            throw new UsernameNotFoundException(passwordUpdateDTO.getEmail());
+        }
+    }
+
 }

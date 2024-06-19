@@ -9,6 +9,7 @@ import dev.nick.itsecprojekt.utils.MaskingUtils;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,12 +29,10 @@ public class MyController {
     private static final Logger logger = LoggerFactory.getLogger(MyController.class);
 
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
     private final UserService userService;
 
     public MyController(PasswordEncoder passwordEncoder, UserRepository userRepository, UserService userService) {
         this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
         this.userService = userService;
     }
 
@@ -75,25 +74,21 @@ public class MyController {
 
         String escapedEmail = HtmlUtils.htmlEscape(email);
 
-        MyUser user = userRepository.findByEmail(escapedEmail);
+        try {
+            userService.deleteUser(escapedEmail);
 
-        if (user != null) {
-            userRepository.delete(user);
-
-            model.addAttribute("deletedUserEmail", user.getEmail());
-
-            logger.info("User deleted successfully", user.getEmail());
-            logger.warn("User " + MaskingUtils.anonymize(user.getEmail()) + " was deleted from database");
-
+            model.addAttribute("deletedUserEmail", escapedEmail);
+            logger.info("User deleted successfully", escapedEmail);
+            logger.warn("User " + MaskingUtils.anonymize(escapedEmail) + " was deleted from database");
 
             return "delete_success";
-        } else {
-            model.addAttribute("errorMessage", escapedEmail+" not found");
-            logger.info("User Not Found");
-            model.addAttribute("errorMessage", email+" not found");
+        } catch (Exception UsernameNotFoundException) {
 
-            logger.warn("User " + MaskingUtils.anonymize(user.getEmail()) + " not found");
-            logger.debug("Debugging " + user.getEmail());
+            model.addAttribute("errorMessage", escapedEmail + " not found");
+            logger.info("User Not Found");
+            model.addAttribute("errorMessage", escapedEmail + " not found");
+            logger.warn("User " + MaskingUtils.anonymize(escapedEmail) + " not found");
+            logger.debug("Debugging " + escapedEmail);
 
             return "delete_user";
         }
@@ -133,22 +128,17 @@ public class MyController {
     public String updatePassword(@Valid @ModelAttribute("passwordUpdateDTO") PasswordUpdateDTO passwordUpdateDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             logger.error("Password was not updated");
-
             return "update_password";
         }
-        MyUser user = userRepository.findByEmail(passwordUpdateDTO.getEmail());
-        if (user != null) {
-            user.setPassword(passwordEncoder.encode(passwordUpdateDTO.getNewPassword()));
-            userRepository.save(user);
+
+        try {
+            userService.updatePassword(passwordUpdateDTO);
             model.addAttribute("successMessage", "Password updated successfully");
-
-            logger.warn("User " +  MaskingUtils.anonymize(user.getEmail()) + " update password successful");
-
+            logger.warn("User " + MaskingUtils.anonymize(passwordUpdateDTO.getEmail()) + " update password successful");
             return "update_password_successful";
-        } else {
+        } catch (UsernameNotFoundException e) {
             model.addAttribute("errorMessage", "User not found");
             return "update_password";
         }
     }
-
 }

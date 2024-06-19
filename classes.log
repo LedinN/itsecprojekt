@@ -1,0 +1,6 @@
+2024-06-19 20:36:35 [main] INFO  dev.nick.itsecprojekt.ItsecprojektApplication - Starting ItsecprojektApplication using Java 22.0.1 with PID 21464 (G:\Code\itsecprojekt\target\classes started by Mr Maquina in G:\Code\itsecprojekt)
+2024-06-19 20:36:35 [main] INFO  dev.nick.itsecprojekt.ItsecprojektApplication - No active profile set, falling back to 1 default profile: "default"
+2024-06-19 20:36:38 [main] INFO  dev.nick.itsecprojekt.ItsecprojektApplication - Started ItsecprojektApplication in 2.968 seconds (process running for 3.446)
+2024-06-19 20:37:21 [http-nio-8080-exec-6] WARN  dev.nick.itsecprojekt.controller.MyController - User n***n@hotmail.com was created
+2024-06-19 20:37:30 [http-nio-8080-exec-9] INFO  dev.nick.itsecprojekt.controller.MyController - User deleted successfully
+2024-06-19 20:37:30 [http-nio-8080-exec-9] WARN  dev.nick.itsecprojekt.controller.MyController - User n***n@hotmail.com was deleted from database
